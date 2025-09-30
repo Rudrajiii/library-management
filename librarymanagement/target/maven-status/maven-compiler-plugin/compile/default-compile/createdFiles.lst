@@ -1,4 +1,5 @@
 library\controller\HandleBooksUnderStudent.class
+library\source\BooksData.class
 library\controller\HandleStudentLogin.class
 library\model\Student.class
 library\model\Admin.class
@@ -8,6 +9,8 @@ library\source\StudentData.class
 library\App.class
 library\utils\DBUtil.class
 library\dboperations\AdminDAO.class
+library\dboperations\BooksDAO.class
+library\model\Book.class
 library\dboperations\StudentDAO.class
 library\utils\DBSetup.class
 library\controller\HandleAdminLogin.class

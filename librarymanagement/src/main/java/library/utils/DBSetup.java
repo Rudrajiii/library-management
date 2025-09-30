@@ -13,7 +13,7 @@ public class DBSetup {
              * @see create users , admin and books table if not exists
              * @see users table has id, name, enrollment, password fields
              * @see admin table has id, usernname, adminId fields
-             * @see books table has id, title, author, issuedTo fields
+             * @see books table has id, bookName, available fields
              */
             stmt.execute("CREATE TABLE IF NOT EXISTS students (" +
                     "id INTEGER PRIMARY KEY AUTOINCREMENT," +
@@ -28,9 +28,8 @@ public class DBSetup {
                     ");");
             stmt.execute("CREATE TABLE IF NOT EXISTS books (" +
                     "id INTEGER PRIMARY KEY AUTOINCREMENT," +
-                    "title TEXT NOT NULL," +
-                    "author TEXT NOT NULL," +
-                    "issuedTo TEXT" +
+                    "bookName TEXT NOT NULL," +
+                    "available INTEGER NOT NULL" +
                     ");");
 
             System.out.println(">> Database initialized. <<");

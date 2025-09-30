@@ -1,7 +1,10 @@
 C:\Users\Rudra\OneDrive\Desktop\java-project\librarymanagement\src\main\java\library\source\StudentData.java
+C:\Users\Rudra\OneDrive\Desktop\java-project\librarymanagement\src\main\java\library\source\BooksData.java
 C:\Users\Rudra\OneDrive\Desktop\java-project\librarymanagement\src\main\java\library\model\Student.java
 C:\Users\Rudra\OneDrive\Desktop\java-project\librarymanagement\src\main\java\library\dboperations\StudentDAO.java
+C:\Users\Rudra\OneDrive\Desktop\java-project\librarymanagement\src\main\java\library\model\Book.java
 C:\Users\Rudra\OneDrive\Desktop\java-project\librarymanagement\src\main\java\library\RemoveATableFromDB.java
+C:\Users\Rudra\OneDrive\Desktop\java-project\librarymanagement\src\main\java\library\dboperations\BooksDAO.java
 C:\Users\Rudra\OneDrive\Desktop\java-project\librarymanagement\src\main\java\library\controller\HandleAdminLogin.java
 C:\Users\Rudra\OneDrive\Desktop\java-project\librarymanagement\src\main\java\library\controller\HandleStudentLogin.java
 C:\Users\Rudra\OneDrive\Desktop\java-project\librarymanagement\src\main\java\library\source\AdminData.java

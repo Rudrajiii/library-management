@@ -11,8 +11,19 @@ public class HandleStudentLogin {
         String ask_password = scanner.nextLine();
 
         AuthServices AUTH = new AuthServices();
-        String response = AUTH.AuthoriseStudent(ask_enrollment, ask_password);
+        int response = AUTH.AuthoriseStudent(ask_enrollment, ask_password);
 
-        System.out.println(response);
+        if(response == 200){
+            String studentName = AUTH.getNameViaRole(ask_enrollment, "STUDENT");
+            System.out.println("Login Successful as Student");
+            System.out.println("Welcome XD " + studentName);
+            HandleBooksUnderStudent.handleBookEvents();
+
+        } else if (response == 404) {
+            System.out.println("Student Not Found");
+        } else {
+            System.out.println("Invalid Credentials");
+        }
+
     }
 }

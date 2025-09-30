@@ -1,3 +1,5 @@
 - student model - done
 - register them to db - done
+- books table created
+- show all books available in library
 - start building cli

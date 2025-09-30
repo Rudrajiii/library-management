@@ -4,15 +4,21 @@ import library.utils.DBSetup;
 
 import java.util.Scanner;
 
-import library.dboperations.StudentDAO;
-import library.model.Student;
-import library.source.StudentData;
+// import library.model.Admin;
+// import library.model.Student;
+// import library.model.Book;
+
+// import library.dboperations.AdminDAO;
+// import library.dboperations.StudentDAO;
+// import library.dboperations.BooksDAO;
+
+// import library.source.AdminData;
+// import library.source.StudentData;
+// import library.source.BooksData;
+
 import library.controller.HandleAdminLogin;
 import library.controller.HandleStudentLogin;
 
-import library.dboperations.AdminDAO;
-import library.model.Admin;
-import library.source.AdminData;
 
 
 
@@ -48,6 +54,13 @@ public class App {
 
         // StudentDAO studentDAO = new StudentDAO();
         // AdminDAO adminDAO = new AdminDAO();
+        // BooksDAO bookDAO = new BooksDAO();
+        // BooksData booksData = new BooksData();
+        // Book[] books = booksData.get_books();
+
+        // for(Book book : books){
+        //     bookDAO.addBook(book);
+        // }
 
         // Student student1 = new Student( 0,"John Doe", "ENR123456", "password123");
         // studentDAO.addStudent(student1);

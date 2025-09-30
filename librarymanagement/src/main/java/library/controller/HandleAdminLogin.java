@@ -12,8 +12,16 @@ public class HandleAdminLogin {
         String ask_adminId = scanner.nextLine();
 
         AuthServices AUTH = new AuthServices();
-        String response = AUTH.AuthoriseAdmin(ask_username , ask_adminId);
+        int response = AUTH.AuthoriseAdmin(ask_username , ask_adminId);
 
-        System.out.println(response);
+        if(response == 200){
+            String adminName = AUTH.getNameViaRole(ask_adminId, "ADMIN");
+            System.out.println("Login Successful as Admin");
+            System.out.println("Welcome XD " + adminName);
+        } else if (response == 404) {
+            System.out.println("Admin Not Found");
+        } else {
+            System.out.println("Invalid Credentials");
+        }
     }
 }

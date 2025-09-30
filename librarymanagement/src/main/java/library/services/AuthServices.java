@@ -11,34 +11,55 @@ public class AuthServices {
         this.adminDAO = new AdminDAO();
     }
 
-    public String AuthoriseStudent(String enrollment , String password){
+    
+    
+    public int AuthoriseStudent(String enrollment , String password){
         Student getStudentInfo = studentDAO.getStudentByEnrollment(enrollment);
 
         if(getStudentInfo == null){
-            return "Student Not Fount";
+            return 404;
         }
 
         boolean isAuthorised = getStudentInfo.getPassword().equals(password);
+
+
         if(isAuthorised){
-            return "Student Logged in as -> " + getStudentInfo.getName();
+            return 200;
         }
 
-        return "Invalid Credentials...";
+        return 401;
+    
     }
 
-    public String AuthoriseAdmin(String username , String adminId){
+    public int AuthoriseAdmin(String username , String adminId){
         Admin getAdminInfo = adminDAO.getAdminByAdminId(adminId);
 
         if(getAdminInfo == null){
-            return "Admin Not Fount";
+            return 404;
         }
 
         boolean isAuthorised = getAdminInfo.getAdminUsername().equals(username);
+
         if(isAuthorised){
-            return "Admin Logged in as -> " + getAdminInfo.getAdminUsername();
+            return 200;
         }
 
-        return "Invalid Credentials...";
+        return 401;
+    }
+
+    public String getNameViaRole(String uid , String role){
+        if(role.equals("STUDENT")){
+            Student getStudentInfo = studentDAO.getStudentByEnrollment(uid);
+            if(getStudentInfo != null){
+                return getStudentInfo.getName();
+            }
+        } else if (role.equals("ADMIN")){
+            Admin getAdminInfo = adminDAO.getAdminByAdminId(uid);
+            if(getAdminInfo != null){
+                return getAdminInfo.getAdminUsername();
+            }
+        }
+        return null;
     }
 
     
