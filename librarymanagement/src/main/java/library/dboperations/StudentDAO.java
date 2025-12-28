@@ -29,6 +29,23 @@ public class StudentDAO {
         }
     }
 
+    public Integer getStudentId(String enrollment){
+        String sql = "SELECT id FROM students WHERE enrollment = ?";
+        try(
+            Connection conn = DBUtil.getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+        ){
+            pstmt.setString(1, enrollment);
+            ResultSet rs = pstmt.executeQuery();
+            if(rs.next()){
+                return rs.getInt("id");
+            }
+        } catch ( Exception error){
+            error.printStackTrace();
+        }
+        return null;
+    }
+
     public Student getStudentByEnrollment(String enrollment){
         String sql = "SELECT * FROM students WHERE enrollment = ?";
         try(

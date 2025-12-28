@@ -20,9 +20,6 @@ import library.controller.HandleAdminLogin;
 import library.controller.HandleStudentLogin;
 
 
-
-
-
 public class App {
     private static final Scanner scanner = new Scanner(System.in);
     public static void main(String[] args) {
@@ -31,24 +28,33 @@ public class App {
 
         System.out.println("\n===== Library Management CLI =====");
 
-        while(true){
+        while (true) {
             System.out.println("1. Student Login");
             System.out.println("2. Admin Login");
             System.out.println("3. Exit");
             System.out.print("Enter choice: ");
-            
-            int choice = scanner.nextInt();
-            scanner.nextLine();
+
+            int choice;
+            try {
+                choice = Integer.parseInt(scanner.nextLine().trim());
+            } catch (Exception e) {
+                System.out.println("Invalid input. Please enter a number.");
+                continue;
+            }
 
             switch (choice) {
                 case 1:
                     HandleStudentLogin.handleStudentLogin();
-                    return;
+                    break; // return to menu
                 case 2:
                     HandleAdminLogin.handleAdminLogin();
-                    return;
+                    break; // return to menu
+                case 3:
+                    System.out.println("Exiting... Goodbye!");
+                    return; // exit the program
                 default:
-                    return;
+                    System.out.println("Invalid choice. Please try again.");
+                    break;
             }
         }
 

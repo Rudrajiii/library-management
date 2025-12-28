@@ -1,6 +1,9 @@
 package library.controller;
 import library.dboperations.BooksDAO;
+import library.dboperations.BorrowedBooksDAO;
 import library.model.Book;
+import library.model.BorrowedBookModel;
+import library.dboperations.StudentDAO;
 import java.util.Scanner;
 
 public class HandleBooksUnderStudent {
@@ -9,7 +12,7 @@ public class HandleBooksUnderStudent {
         /*
          * @use will fetch all books from 'books' table
          */
-        System.out.println("Books Available in Library:\nBooks Id / Book Name / Availability");
+        System.out.println("Books Available in Library:\n\nBooks Id / Book Name / Availability");
         BooksDAO bookDAO = new BooksDAO();
         Book[] books = bookDAO.getAllBooks();
         
@@ -22,36 +25,238 @@ public class HandleBooksUnderStudent {
             System.out.println(book);
         }
     }
+
+    private static void showBooksUnderYou(){
+        /* show all borrowed books for the logged-in student */
+        BorrowedBooksDAO borrowedBooksDAO = new BorrowedBooksDAO();
+        /* get student id by enrollment number */
+        StudentDAO studentDAO = new StudentDAO();
+        System.out.println("Enter your enrollment number: ");
+        String enrollmentNumber = scanner.nextLine().trim();
+
+        Integer studentId = studentDAO.getStudentId(enrollmentNumber);
+        if(studentId == null){
+            System.out.println("Invalid enrollment number.");
+            return;
+        }
+
+        BorrowedBookModel[] borrowedBooks = borrowedBooksDAO.getBorrowedBooksByStudentId(studentId);
+
+        if(borrowedBooks == null || borrowedBooks.length == 0){
+            System.out.println("You have not borrowed any books.");
+            return;
+        }
+        System.out.println("Books under you:\nBook Id / Book Name / Borrow Date / Return Date / Is Returned / Fine");
+        BooksDAO bookDAO = new BooksDAO();
+        for(BorrowedBookModel borrowedBook : borrowedBooks){
+            String bookName = bookDAO.getBookName(borrowedBook.getBookId());
+            System.out.println(
+                borrowedBook.getBookId() + " / " +
+                bookName + " / " +
+                borrowedBook.getBorrowDate() + " / " +
+                borrowedBook.getReturnDate() + " / " +
+                (borrowedBook.isReturned() ? "Yes" : "No") + " / " +
+                borrowedBook.getFine()
+            );
+        }
+    }
+
+    private static void handleBorrowBook(){
+        /*
+         * @use handle borrowing logic
+        */
+        while(true){
+            System.out.println("\n--- Borrow Book ---");
+            System.out.print("Enter Book ID to borrow (0 to cancel): ");
+            try{
+                int bookId = Integer.parseInt(scanner.nextLine().trim());
+
+                if(bookId == 0) {
+                    System.out.println("Borrowing cancelled.");
+                    return;
+                }
+                /* check if this book is available */
+                BooksDAO bookDAO = new BooksDAO();
+                String bookName = bookDAO.getBook(bookId);
+                if(bookName.equals("NOT_AVAILABLE")) {
+                    System.out.println("Book is not available for borrowing.\nPlease choose another book.");
+                    continue;
+                }
+                if(bookName.equals("INVALID_BOOK_ID")) {
+                    System.out.println("Invalid Book ID. Please try again.");
+                    continue;
+                }
+    
+    
+                /* now borrow the book */
+                /* ask for student enrollment number */
+                System.out.print("Enter your enrollment number: ");
+                String enrollmentNumber = scanner.nextLine().trim();
+                /* now get the student id */
+                StudentDAO studentDAO = new StudentDAO();
+                Integer studentId = studentDAO.getStudentId(enrollmentNumber);
+                if(studentId == null){
+                    System.out.println("Invalid enrollment number.");
+                    continue;
+                }
+    
+                /* now set the borrowed book details */
+                BorrowedBooksDAO borrowedBooksDAO = new BorrowedBooksDAO();
+                BorrowedBookModel borrowedBook = new BorrowedBookModel(
+                    0,
+                    studentId,
+                    bookId,
+                    java.time.LocalDate.now().toString(),
+                    java.time.LocalDate.now().plusDays(14).toString(), // return date after 14 days
+                    false,
+                    0.0 // no fine when borrowing
+                );
+    
+                boolean inserted = borrowedBooksDAO.addBorrowedBook(borrowedBook);
+    
+                if (inserted) {
+                    System.out.println("Book " + bookName + " borrowed successfully.");
+                    /* now also decrement the available copies of the book */
+                    bookDAO.decrementBookAvailability(bookId);
+                } else {
+                    System.out.println("Failed to record borrowing. Please try again.");
+                }
+                break;
+            } catch(Exception e){
+                System.out.println("Invalid input. Please enter a valid Book ID.");
+                continue;
+            }
+        }
+
+    }
+
+    private static void handleReturnBook(){
+        /*
+         * @use handle returning logic with fine calculation
+         */
+        BorrowedBooksDAO borrowedBooksDAO = new BorrowedBooksDAO();
+        StudentDAO studentDAO = new StudentDAO();
+        
+        System.out.print("Enter your enrollment number: ");
+        String enrollmentNumber = scanner.nextLine().trim();
+        
+        Integer studentId = studentDAO.getStudentId(enrollmentNumber);
+        if(studentId == null){
+            System.out.println("Invalid enrollment number.");
+            return;
+        }
+        
+        // Show borrowed books that are not yet returned
+        BorrowedBookModel[] borrowedBooks = borrowedBooksDAO.getBorrowedBooksByStudentId(studentId);
+        
+        if(borrowedBooks == null || borrowedBooks.length == 0){
+            System.out.println("You have not borrowed any books.");
+            return;
+        }
+        
+        boolean hasUnreturnedBooks = false;
+
+        System.out.println("Your unreturned books:\nBorrowed Book ID / Book ID / Borrow Date / Return Date / Fine");
+        BooksDAO bookDAO = new BooksDAO();
+        
+        for(BorrowedBookModel borrowedBook : borrowedBooks){
+            if(!borrowedBook.isReturned()){
+                hasUnreturnedBooks = true;
+                String bookName = bookDAO.getBookName(borrowedBook.getBookId());
+                System.out.println(
+                    borrowedBook.getId() + " / " +
+                    borrowedBook.getBookId() + " (" + bookName + ") / " +
+                    borrowedBook.getBorrowDate() + " / " +
+                    borrowedBook.getReturnDate() + " / " +
+                    borrowedBook.getFine()
+                );
+            }
+        }
+        
+        if(!hasUnreturnedBooks){
+            System.out.println("All your borrowed books have been returned.");
+            return;
+        }
+        
+        System.out.print("\nEnter Borrowed Book ID to return (0 to cancel): ");
+        try{
+            int borrowedBookId = Integer.parseInt(scanner.nextLine().trim());
+            
+            if(borrowedBookId == 0) {
+                System.out.println("Return cancelled.");
+                return;
+            }
+            
+            // Verify this borrowed book belongs to the student
+            boolean validBorrowedBook = false;
+            int bookId = 0;
+            for(BorrowedBookModel borrowedBook : borrowedBooks){
+                if(borrowedBook.getId() == borrowedBookId && !borrowedBook.isReturned()){
+                    validBorrowedBook = true;
+                    bookId = borrowedBook.getBookId();
+                    break;
+                }
+            }
+            
+            if(!validBorrowedBook){
+                System.out.println("Invalid Borrowed Book ID or book already returned.");
+                return;
+            }
+            
+            // Return the book (this will calculate and store fine if overdue)
+            boolean returned = borrowedBooksDAO.returnBook(borrowedBookId);
+            if(returned){
+                // Increment book availability
+                bookDAO.incrementBookAvailability(bookId);
+            }
+            
+        } catch(Exception e){
+            System.out.println("Invalid input. Please enter a valid Borrowed Book ID.");
+        }
+    }
+
     public static void handleBookEvents(){
         /*
          * @use will handle all book related events for student
          */
-        System.out.println("1. View All Books");
-        System.out.println("2. Books Under You");
-        System.out.println("3. Borrow Book");
-        System.out.println("4. Return Book");
-        System.out.println("5. Exit");
-        System.out.print("Enter choice: ");
-        
-        int choice = scanner.nextInt();
-        scanner.nextLine();
+        while (true) {
+            System.out.println("\n--- Student Menu ---");
+            System.out.println("[STUDETNT] 1. View All Books");
+            System.out.println("[STUDENT] 2. Books Under You");
+            System.out.println("[STUDENT] 3. Borrow Book");
+            System.out.println("[STUDENT] 4. Return Book");
+            System.out.println("[STUDENT] 5. Logout");
+            System.out.print(" [STUDENT] Enter Your choice: ");
 
-        switch (choice) {
-            case 1:
-                showAllBooks();
-                break;
-            
-            case 2:
-                // handleBooksUnderYou();
-                break;
-            case 3:
-                // handleBorrowBook();
-                break;
-            case 4: 
-                // handleReturnBook();
-                break;
-            default:
-                return;
+            int choice;
+            try {
+                choice = Integer.parseInt(scanner.nextLine().trim());
+            } catch (Exception e) {
+                System.out.println("Invalid input. Please enter a number.");
+                continue;
+            }
+
+            switch (choice) {
+                case 1:
+                    showAllBooks();
+                    break;
+                case 2:
+                    showBooksUnderYou();
+                    break;
+                case 3:
+                    handleBorrowBook();
+                    break;
+                case 4:
+                    handleReturnBook();
+                    break;
+                case 5:
+                    // return to main menu
+                    System.out.println("[STUDENT] Logging out...");
+                    return;
+                default:
+                    System.out.println("[STUDENT] Invalid choice. Please try again.");
+                    continue;
+            }
         }
     }
 }

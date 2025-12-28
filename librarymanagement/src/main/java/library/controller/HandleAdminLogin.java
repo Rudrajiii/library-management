@@ -18,6 +18,7 @@ public class HandleAdminLogin {
             String adminName = AUTH.getNameViaRole(ask_adminId, "ADMIN");
             System.out.println("Login Successful as Admin");
             System.out.println("Welcome XD " + adminName);
+            HandleEventsUnderAdmin.handleAdminEvents();
         } else if (response == 404) {
             System.out.println("Admin Not Found");
         } else {

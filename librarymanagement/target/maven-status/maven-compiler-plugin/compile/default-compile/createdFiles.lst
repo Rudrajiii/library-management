@@ -10,8 +10,12 @@ library\App.class
 library\utils\DBUtil.class
 library\dboperations\AdminDAO.class
 library\dboperations\BooksDAO.class
+library\dboperations\BorrowedBooksDAO.class
+library\model\BorrowedBookModel.class
 library\model\Book.class
 library\dboperations\StudentDAO.class
 library\utils\DBSetup.class
 library\controller\HandleAdminLogin.class
+library\dboperations\StudentFinesDAO.class
 library\source\AdminData.class
+library\controller\HandleEventsUnderAdmin.class

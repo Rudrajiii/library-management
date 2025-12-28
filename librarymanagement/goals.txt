@@ -1,5 +1,16 @@
+student:
 - student model - done
 - register them to db - done
-- books table created
-- show all books available in library
-- start building cli
+- books table created - done
+- show all books available in library - done
+- add borrowed books table - done
+- borrow books handler - done
+
+admin:
+- add books to library - 
+- view all books - done
+- view all students
+- view students who didn't return the books yet
+
+- made borrow books handler & save student id and book id in borrowed books table
+- show borrowed books for a student id - done
