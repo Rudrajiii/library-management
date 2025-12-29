@@ -5,6 +5,14 @@ public class Student {
     private String name;
     private String enrollment;
     private String password;
+    // For overdue book details
+    private String borrowDate;
+    private String bookTitle;
+
+    public Student(String name , String enrollment){
+        this.name = name;
+        this.enrollment = enrollment;
+    }
 
     // student constructor
     public Student( String name, String enrollment, String password) {
@@ -50,6 +58,22 @@ public class Student {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getBorrowDate() {
+        return borrowDate;
+    }
+
+    public void setBorrowDate(String borrowDate) {
+        this.borrowDate = borrowDate;
+    }
+
+    public String getBookTitle() {
+        return bookTitle;
+    }
+
+    public void setBookTitle(String bookTitle) {
+        this.bookTitle = bookTitle;
     }
 
     @Override

@@ -3,6 +3,8 @@ package library.dboperations;
 import library.model.Student;
 import library.utils.DBUtil;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class StudentDAO {
     public void addStudent(Student student){
@@ -27,6 +29,28 @@ public class StudentDAO {
         } catch ( Exception error){
             error.printStackTrace();
         }
+    }
+
+    // this is for admin to see all students
+    public List<Student> findAll() throws SQLException {
+        String sql = "SELECT * FROM students";
+        List<Student> students = new ArrayList<>();
+        try(
+            Connection conn = DBUtil.getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            ResultSet rs = pstmt.executeQuery()
+        ){
+            while(rs.next()){
+                students.add(
+                    new Student(
+                        rs.getString("name"),
+                        rs.getString("enrollment")
+                ));
+            }
+        } catch ( Exception error){
+            error.printStackTrace();
+        }
+        return students;
     }
 
     public Integer getStudentId(String enrollment){

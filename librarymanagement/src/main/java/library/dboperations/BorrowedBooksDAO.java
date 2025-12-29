@@ -2,6 +2,7 @@ package library.dboperations;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import library.model.BorrowedBookModel;
 import library.utils.DBUtil;
@@ -10,6 +11,7 @@ import java.util.List;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import library.model.Student;
 
 
 public class BorrowedBooksDAO {
@@ -44,7 +46,36 @@ public class BorrowedBooksDAO {
             error.printStackTrace();
             return false;
         }
-        
+    }
+
+    public List<Student> findAllStudentsWhoDidNotReturnBooksYet() throws SQLException {
+        String sql = "SELECT DISTINCT s.name, s.enrollment, bb.borrowDate, b.bookName " +
+            "FROM students s " +
+            "INNER JOIN borrowed_books bb ON s.id = bb.studentId " +
+            "INNER JOIN books b ON bb.bookId = b.id " +
+            "WHERE bb.isReturned = 0";
+        List<Student> students = new ArrayList<>();
+        try(
+            Connection conn = DBUtil.getConnection();       
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            ResultSet rs = pstmt.executeQuery();
+        ){
+            while(rs.next()){
+                Student student = new Student(
+                    rs.getString("name"),
+                    rs.getString("enrollment")
+                );
+                students.add(student);
+                // Add book details to student
+                String borrowDate = rs.getString("borrowDate");
+                String bookTitle = rs.getString("bookName");
+                student.setBorrowDate(borrowDate);
+                student.setBookTitle(bookTitle);
+                
+
+            }
+        }
+        return students;
     }
 
     public BorrowedBookModel[] getBorrowedBooksByStudentId(int studentId){

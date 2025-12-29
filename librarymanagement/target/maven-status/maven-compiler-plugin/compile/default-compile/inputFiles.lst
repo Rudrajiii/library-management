@@ -2,6 +2,7 @@ C:\Users\Rudra\OneDrive\Desktop\java-project\librarymanagement\src\main\java\lib
 C:\Users\Rudra\OneDrive\Desktop\java-project\librarymanagement\src\main\java\library\source\BooksData.java
 C:\Users\Rudra\OneDrive\Desktop\java-project\librarymanagement\src\main\java\library\controller\HandleEventsUnderAdmin.java
 C:\Users\Rudra\OneDrive\Desktop\java-project\librarymanagement\src\main\java\library\model\Student.java
+C:\Users\Rudra\OneDrive\Desktop\java-project\librarymanagement\src\main\java\library\services\BookService.java
 C:\Users\Rudra\OneDrive\Desktop\java-project\librarymanagement\src\main\java\library\dboperations\StudentDAO.java
 C:\Users\Rudra\OneDrive\Desktop\java-project\librarymanagement\src\main\java\library\dboperations\StudentFinesDAO.java
 C:\Users\Rudra\OneDrive\Desktop\java-project\librarymanagement\src\main\java\library\model\Book.java
@@ -15,6 +16,7 @@ C:\Users\Rudra\OneDrive\Desktop\java-project\librarymanagement\src\main\java\lib
 C:\Users\Rudra\OneDrive\Desktop\java-project\librarymanagement\src\main\java\library\controller\HandleBooksUnderStudent.java
 C:\Users\Rudra\OneDrive\Desktop\java-project\librarymanagement\src\main\java\library\model\Admin.java
 C:\Users\Rudra\OneDrive\Desktop\java-project\librarymanagement\src\main\java\library\utils\DBSetup.java
+C:\Users\Rudra\OneDrive\Desktop\java-project\librarymanagement\src\main\java\library\services\StudentService.java
 C:\Users\Rudra\OneDrive\Desktop\java-project\librarymanagement\src\main\java\library\App.java
 C:\Users\Rudra\OneDrive\Desktop\java-project\librarymanagement\src\main\java\library\services\AuthServices.java
 C:\Users\Rudra\OneDrive\Desktop\java-project\librarymanagement\src\main\java\library\utils\DBUtil.java

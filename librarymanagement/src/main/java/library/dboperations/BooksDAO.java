@@ -7,29 +7,27 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BooksDAO {
-    public void addBook(Book book){
+    public void addBook(Book book) throws SQLException {
         String sql = "INSERT INTO books(bookName , available) VALUES(?,?)";
 
         try(
             Connection conn = DBUtil.getConnection();
-            PreparedStatement pstmt = conn.prepareStatement(sql);
+            PreparedStatement pstmt = conn.prepareStatement(
+                sql , Statement.RETURN_GENERATED_KEYS
+            );
         ){
             pstmt.setString(1, book.getBookName());
             pstmt.setInt(2, book.getAvailability());
             pstmt.executeUpdate();
 
             /**
-             * @param automatically set the id to a new student
+             * @param automatically set the id to a new book
             */
-            try(ResultSet getGeneratedkeys = pstmt.getGeneratedKeys()){
-                if(getGeneratedkeys.next()){
-                    book.setId(getGeneratedkeys.getInt(1));
+            try(ResultSet keys = pstmt.getGeneratedKeys()){
+                if(keys.next()){
+                    book.setId(keys.getInt(1));
                 }
             }
-
-            System.out.println(">> Book added successfully <<");
-        }catch ( Exception error){
-            error.printStackTrace();
         }
     }
 

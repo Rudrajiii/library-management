@@ -17,5 +17,7 @@ library\dboperations\StudentDAO.class
 library\utils\DBSetup.class
 library\controller\HandleAdminLogin.class
 library\dboperations\StudentFinesDAO.class
+library\services\StudentService.class
 library\source\AdminData.class
+library\services\BookService.class
 library\controller\HandleEventsUnderAdmin.class
