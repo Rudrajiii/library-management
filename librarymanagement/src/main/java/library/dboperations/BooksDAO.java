@@ -31,7 +31,7 @@ public class BooksDAO {
         }
     }
 
-    public Book getBookByBookId(int bookId){
+    public Book findBookByBookId(int bookId) throws SQLException {
         String sql = "SELECT * FROM books WHERE id = ?";
         try(
             Connection conn = DBUtil.getConnection();
@@ -53,7 +53,7 @@ public class BooksDAO {
         return null;
     }
 
-    public String getBook(int bookId){
+    public String findBook(int bookId) throws SQLException {
         String sql = "SELECT * FROM books WHERE id = ?";
         try(
             Connection conn = DBUtil.getConnection();
@@ -74,7 +74,7 @@ public class BooksDAO {
         return "NOT_AVAILABLE";
     }
 
-    public String getBookName(int bookId){
+    public String findBookName(int bookId) throws SQLException {
         String sql = "SELECT bookName FROM books WHERE id = ?";
         try(
             Connection conn = DBUtil.getConnection();
@@ -92,7 +92,7 @@ public class BooksDAO {
         return null;
     }
 
-    public void decrementBookAvailability(int bookId){
+    public int decrementBookAvailability(int bookId) throws SQLException {
         String sql = "UPDATE books SET available = available - 1 WHERE id = ? AND available > 0";
         try(
             Connection conn = DBUtil.getConnection();
@@ -100,17 +100,14 @@ public class BooksDAO {
         ){
             pstmt.setInt(1, bookId);
             int affectedRows = pstmt.executeUpdate();
-            if(affectedRows > 0){
-                System.out.println(">> Book availability decremented. <<");
-            } else {
-                System.out.println(">> Book availability could not be decremented (maybe no copies available). <<");
-            }
+            return affectedRows;
         }catch( Exception error){
             error.printStackTrace();
         }
+        return 0;
     }
 
-    public void incrementBookAvailability(int bookId){
+    public int incrementBookAvailability(int bookId) throws SQLException {
         String sql = "UPDATE books SET available = available + 1 WHERE id = ?";
         try(
             Connection conn = DBUtil.getConnection();
@@ -118,17 +115,14 @@ public class BooksDAO {
         ){
             pstmt.setInt(1, bookId);
             int affectedRows = pstmt.executeUpdate();
-            if(affectedRows > 0){
-                System.out.println(">> Book availability incremented. <<");
-            } else {
-                System.out.println(">> Book availability could not be incremented. <<");
-            }
+            return affectedRows;
         }catch( Exception error){
             error.printStackTrace();
         }
+        return 0;
     }
 
-    public Book[] getAllBooks(){
+    public Book[] findAllBooks() throws SQLException {
         String sql = "SELECT * FROM books";
         List<Book> bookList = new ArrayList<>();
         
